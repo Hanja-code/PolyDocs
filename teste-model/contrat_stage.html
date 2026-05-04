@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convention de Stage - Polymathes</title>
+    <style>
+        /* --- Styles de l'Interface de Saisie (à gauche) --- */
+        #ui-panel {
+            position: fixed; left: 0; top: 0; width: 350px; height: 100vh;
+            background: #2c3e50; color: white; padding: 20px;
+            box-sizing: border-box; overflow-y: auto; z-index: 1000;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.3);
+        }
+        #ui-panel h3 { color: #3498db; margin-top: 0; border-bottom: 1px solid #555; padding-bottom: 10px; }
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; font-size: 9pt; margin-bottom: 5px; color: #bdc3c7; }
+        .input-group input, .input-group textarea, .input-group select { 
+            width: 100%; padding: 8px; border-radius: 4px; border: none; 
+            background: #34495e; color: white; box-sizing: border-box; 
+        }
+        .flex-group { display: flex; gap: 5px; }
+        .checkbox-group { display: flex; align-items: center; gap: 8px; font-size: 9pt; color: #bdc3c7; }
+        .checkbox-group input { width: auto; }
+        
+        #print-btn { 
+            width: 100%; padding: 12px; background: #27ae60; color: white; 
+            border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-top: 10px;
+        }
+
+        /* --- Styles du Document (à droite) --- */
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; color: #000; background-color: #f0f0f0; line-height: 1.2; display: flex; }
+        .content-area { margin-left: 350px; width: calc(100% - 350px); display: flex; justify-content: center; padding: 20px 0; }
+
+        .page { 
+            width: 210mm; height: 297mm; padding: 10mm 15mm; margin: 0; 
+            background: white; box-sizing: border-box; display: flex; flex-direction: column;
+            justify-content: space-between; overflow: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .header { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #0056b3; margin-bottom: 10px; padding-bottom: 8px; }
+        .logo-img { height: 60px; }
+        .header-text { text-align: right; }
+        h1 { margin: 0; font-size: 18pt; color: #0056b3; text-transform: uppercase; letter-spacing: 1px; }
+        .url-school { font-size: 10pt; color: #333; margin: 0; font-weight: bold; }
+
+        h2 { font-size: 10pt; background-color: #dddddd; padding: 5px 12px; margin: 10px 0 6px 0; border-left: 5px solid #0056b3; text-transform: uppercase; }
+        
+        .field { margin-bottom: 6px; width: 100%; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 20px; }
+        
+        label { display: block; font-weight: bold; font-size: 9pt; margin-bottom: 1px; color: #000; }
+        .line { border-bottom: 1px solid #aaa; min-height: 20px; width: 100%; font-size: 10pt; font-weight: normal; }
+        
+        /* Style des valeurs */
+        .val { color: #0056b3; }
+        
+        /* RETRECISSEMENT spécifique pour les missions */
+        #val-mission { 
+            font-size: 8.5pt; 
+            white-space: pre-wrap; 
+            word-break: break-word; 
+            display: block; 
+            line-height: 1.3; 
+        }
+        
+        .date-stamp { color: #1e40af; font-family: 'Courier New', Courier, monospace; font-weight: bold; text-transform: uppercase; border: 1.5px solid #1e40af; padding: 1px 6px; border-radius: 3px; display: inline-block; transform: rotate(-1deg); }
+
+        .article-box { border: 1px solid #ccc; padding: 8px 12px; border-radius: 4px; font-size: 9.2pt; margin-top: 5px; background-color: #fcfcfc; text-align: justify; }
+        .article-title { font-weight: bold; text-decoration: underline; color: #0056b3; margin-bottom: 3px; display: block; }
+
+        .footer-area { display: flex; justify-content: space-between; align-items: flex-start; margin-top: auto; padding-bottom: 10px; }
+        .sig-block { width: 30%; text-align: center; }
+        .sig-box { border: 1.2px dashed #000; height: 65px; margin-top: 5px; }
+
+        @media print { 
+            #ui-panel { display: none; }
+            body { background: none; display: block; } 
+            .content-area { margin-left: 0; width: 100%; padding: 0; }
+            .page { margin: 0; width: 210mm; height: 297mm; border: none; padding: 10mm 15mm; box-shadow: none; } 
+            @page { margin: 0; size: A4; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="ui-panel">
+        <h3>Saisie du Contrat</h3>
+        <div class="input-group">
+            <label>Nom & Prénoms :</label>
+            <input type="text" oninput="updateVal('stagiaire', this.value)">
+        </div>
+        <div class="input-group">
+            <label>Date de naissance :</label>
+            <input type="date" oninput="updateVal('naissance', formatLongDate(this.value))">
+        </div>
+        <div class="input-group">
+            <label>Établissement / Formation :</label>
+            <input type="text" oninput="updateVal('ecole', this.value)">
+        </div>
+        <div class="input-group">
+            <label>Date de début :</label>
+            <input type="date" oninput="updateVal('debut', formatShortDate(this.value))">
+        </div>
+        <div class="input-group">
+            <label>Durée du stage :</label>
+            <div class="flex-group">
+                <input type="number" id="qty" value="1" min="1" oninput="updateDuree()">
+                <select id="unit" onchange="updateDuree()">
+                    <option value="Mois">Mois</option>
+                    <option value="Mois et demi">Mois et demi</option>
+                </select>
+            </div>
+        </div>
+        <div class="input-group">
+            <label>Missions confiées :</label>
+            <textarea rows="4" oninput="updateVal('mission', this.value)" placeholder="Description longue possible..."></textarea>
+        </div>
+        <div class="input-group">
+            <div class="checkbox-group">
+                <input type="checkbox" id="auto-date" onchange="toggleAutoDate()">
+                <label for="auto-date">Date automatique (Aujourd'hui)</label>
+            </div>
+        </div>
+        <button id="print-btn" onclick="window.print()">🖨️ IMPRIMER LE CONTRAT</button>
+    </div>
+
+    <div class="content-area">
+        <div class="page">
+            <div>
+                <div class="header">
+                    <img src="../LOGO/IMG-20251027-WA0002.jpg" alt="Logo Polymathes" class="logo-img">
+                    <div class="header-text">
+                        <h1>Convention de Stage</h1>
+                        <p class="url-school">Établissement Polymathes</p>
+                    </div>
+                </div>
+                <p style="font-size: 9pt; text-align: justify; margin: 10px 0;">
+                    Entre l'établissement <strong>Polymathes</strong>, représenté par son Directeur, et le stagiaire désigné ci-après, il a été convenu ce qui suit :
+                </p>
+
+                <h2>I. IDENTIFICATION DU STAGIAIRE</h2>
+                <div class="grid">
+                    <div class="field"><label>Nom & Prénoms :</label><div class="line val" id="val-stagiaire"></div></div>
+                    <div class="field"><label>Date de naissance :</label><div class="line val" id="val-naissance"></div></div>
+                </div>
+                <div class="field"><label>Établissement d'origine / Formation suivie :</label><div class="line val" id="val-ecole"></div></div>
+
+                <h2>II. MODALITÉS DU STAGE</h2>
+                <div class="grid">
+                    <div class="field"><label>Date de début :</label><div class="line val" id="val-debut"></div></div>
+                    <div class="field"><label>Durée du stage :</label><div class="line val" id="val-duree">1 Mois</div></div>
+                </div>
+                <div class="field">
+                    <label>Missions confiées :</label>
+                    <div class="val" id="val-mission" style="min-height: 50px; border-bottom: 1px solid #aaa;"></div>
+                </div>
+
+                <h2>III. CONDITIONS GÉNÉRALES ET OBLIGATIONS</h2>
+                <div class="article-box">
+                    <span class="article-title">Article 1 : Discipline et Règlement Intérieur</span>
+                    Le stagiaire s'engage à respecter scrupuleusement les règles en vigueur au sein de l'établissement : <strong>ponctualité</strong> irréprochable, <strong>propreté</strong> des locaux et tenue décente. Le non-respect de ces règles peut causer des sanctions immédiates allant de l'avertissement à la rupture unilatérale du contrat.
+                </div>
+                <div class="article-box">
+                    <span class="article-title">Article 2 : Confidentialité et Secret Professionnel</span>
+                    Le stagiaire est tenu à une obligation de réserve absolue. Il s'interdit de divulguer, copier ou utiliser toute information, donnée numérique (fichiers élèves, notes) ou document administratif dont il aurait connaissance. Le secret professionnel est une condition déterminante de ce stage.
+                </div>
+                <div class="article-box" style="border: 1.5px solid #000; background-color: #fff4f4;">
+                    <span class="article-title">Article 3 : Validité et Protection des Données Post-Stage</span>
+                    Ce contrat prend effet aujourd'hui. L'obligation de confidentialité et l'interdiction de fuite de données mentionnées à l'Article 2 restent <strong>strictement applicables jusqu'à trois (3) ans après la fin effective du stage</strong> afin de protéger l'établissement.
+                </div>
+                <div class="article-box">
+                    <span class="article-title">Article 4 : Fin de stage et Attestation</span>
+                    À l'issue de la période, une attestation de stage sera remise au stagiaire. En cas de faute grave ou non-respect du règlement, l'établissement se réserve le droit de mettre fin au stage sans délivrance d'attestation.
+                </div>
+            </div>
+
+            <div>
+                <div class="footer-area">
+                    <div class="sig-block"><label style="font-size: 9pt; font-weight: bold;">Le Stagiaire</label><div class="sig-box"></div><label style="font-size: 7.5pt;">(Lu et approuvé)</label></div>
+                    <div class="sig-block"><label style="font-size: 9pt; font-weight: bold;">Tuteur de Stage</label><div class="sig-box"></div></div>
+                    <div class="sig-block"><label style="font-size: 9pt; font-weight: bold;">La Direction</label><div class="sig-box"></div><label style="font-size: 7.5pt;">Cachet de l'établissement</label></div>
+                </div>
+                <div style="text-align: center; font-size: 9pt; color: #000; font-weight: bold; border-top: 1px solid #000; padding-top: 5px; margin-top: 10px;">
+                    Fait à Antananarivo, le <span id="val-date-sig">.... / .... / 2026</span>
+                </div>
+                <div style="text-align: center; font-size: 8pt; color: #555; margin-top: 5px;">
+                    Polymathes : Excellence – Ambition – Intégrité | www.polymathes.mg
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateVal(id, value) { document.getElementById('val-' + id).innerText = value; }
+        
+        function formatLongDate(dateStr) {
+            if(!dateStr) return "";
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+        }
+
+        function formatShortDate(dateStr) {
+            if(!dateStr) return "";
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('fr-FR');
+        }
+
+        function updateDuree() {
+            const qty = document.getElementById('qty').value;
+            const unit = document.getElementById('unit').value;
+            document.getElementById('val-duree').innerText = qty + " " + unit;
+        }
+
+        function toggleAutoDate() {
+            const span = document.getElementById('val-date-sig');
+            if(document.getElementById('auto-date').checked) {
+                const now = new Date();
+                const d = String(now.getDate()).padStart(2, '0');
+                const m = String(now.getMonth() + 1).padStart(2, '0');
+                const y = now.getFullYear();
+                span.innerHTML = `<span class="date-stamp">${d} / ${m} / ${y}</span>`;
+            } else {
+                span.innerHTML = ".... / .... / 2026";
+            }
+        }
+    </script>
+</body>
+</html>

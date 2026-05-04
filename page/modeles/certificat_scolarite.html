@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificat de Scolarité - Polymathes</title>
+    <link rel="stylesheet" href="../../style/certificat.css">
+</head>
+<body>
+
+    <div id="form-panel">
+        <h2>Configuration Scolarité</h2>
+        <input type="hidden" id="in-type" value="Scolarité">
+        
+        <div class="input-group">
+            <label>Nom complet de l'élève</label>
+            <input type="text" id="in-name" value="RAZAFINDRAKOTO Jean Luc" oninput="updateFields()">
+        </div>
+        <div class="input-group">
+            <label>Lieu de naissance</label>
+            <input type="text" id="in-extra" value="Antananarivo" oninput="updateFields()">
+        </div>
+        
+        <div class="input-group" id="grp-date-birth">
+            <label>Date de naissance</label>
+            <input type="date" id="in-date-cal" value="2008-05-12" oninput="updateDateFromCal('in-date-text', this.value)">
+            <input type="text" id="in-date-text" value="12 mai 2008" oninput="updateFields()" style="margin-top:5px;">
+        </div>
+
+        <div class="input-group" id="grp-classe">
+            <label>Classe fréquentée</label>
+            <select id="in-classe" onchange="updateFields()">
+                <option value="Terminale">Terminale</option>
+                <option value="Première" selected>Première</option>
+                <option value="Seconde">Seconde</option>
+                <option value="Troisième">Troisième</option>
+                <option value="Quatrième">Quatrième</option>
+                <option value="Cinquième">Cinquième</option>
+                <option value="Sixième">Sixième</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>Année scolaire</label>
+            <input type="text" id="in-annee" value="2025-2026" oninput="updateFields()">
+        </div>
+    </div>
+
+    <button id="print-btn" onclick="window.print()">🖨️ IMPRIMER LE DOCUMENT</button>
+
+    <div class="container-a4">
+        <div class="cut-line"></div>
+        <div class="page-a5">
+            <div class="outer-border">
+                <div class="watermark-text">POLYMATHES</div>
+                <div class="content-wrapper">
+                    <div class="header">
+                        <img src="../../LOGO/IMG-20251027-WA0002.jpg" alt="Logo" class="logo-img">
+                        <div class="school-info">
+                            <p class="school-tagline">Excellence – Ambition – Intégrité</p>
+                            <p class="school-contact">032.58.754.98 | info@polymathes.mg</p>
+                        </div>
+                    </div>
+                    <div class="doc-title">
+                        <h1 class="disp-title">CERTIFICAT DE SCOLARITÉ</h1>
+                        <div class="title-underline"></div>
+                        <p class="doc-ref">Établissement Polymathes Ambanidia</p>
+                    </div>
+                    <div class="content" id="disp-content"></div>
+                    <div class="date-line">Fait à Ambanidia, le 07 Janvier 2026</div>
+                    <div class="footer-sig">
+                        <div class="sig-block">
+                            <span class="sig-title">Le Directeur</span>
+                            <div class="sig-name">RAJAONARISON Sitraka</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="page-a5">
+            <div class="outer-border">
+                <div class="watermark-text">POLYMATHES</div>
+                <div class="content-wrapper">
+                    <div class="header">
+                        <img src="../../LOGO/IMG-20251027-WA0002.jpg" alt="Logo" class="logo-img">
+                        <div class="school-info">
+                            <p class="school-tagline">Excellence – Ambition – Intégrité</p>
+                            <p class="school-contact">032.58.754.98 | info@polymathes.mg</p>
+                        </div>
+                    </div>
+                    <div class="doc-title">
+                        <h1 class="disp-title">CERTIFICAT DE SCOLARITÉ</h1>
+                        <div class="title-underline"></div>
+                        <p class="doc-ref">Établissement Polymathes Ambanidia</p>
+                    </div>
+                    <div class="content" id="disp-content-2"></div>
+                    <div class="date-line">Fait à Ambanidia, le 13 Janvier 2026</div>
+                    <div class="footer-sig">
+                        <div class="sig-block">
+                            <span class="sig-title">Le Directeur</span>
+                            <div class="sig-name">RAJAONARISON Sitraka</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../../js/moteur.js"></script>
+</body>
+</html>

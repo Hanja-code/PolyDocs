@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contrat de Location de Véhicule - Polymathes</title>
+    <style>
+        /* --- Interface de Saisie (à gauche) --- */
+        #ui-panel {
+            position: fixed; left: 0; top: 0; width: 350px; height: 100vh;
+            background: #2c3e50; color: white; padding: 20px;
+            box-sizing: border-box; overflow-y: auto; z-index: 1000;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.3);
+        }
+        #ui-panel h3 { color: #3498db; margin: 15px 0 10px 0; border-bottom: 1px solid #555; padding-bottom: 5px; font-size: 11pt; }
+        .input-group { margin-bottom: 10px; }
+        .input-group label { display: block; font-size: 8pt; margin-bottom: 3px; color: #bdc3c7; }
+        .input-group input, .input-group textarea, .input-group select { 
+            width: 100%; padding: 6px; border-radius: 4px; border: none; 
+            background: #34495e; color: white; box-sizing: border-box; font-size: 8.5pt;
+        }
+        .flex-row { display: flex; gap: 5px; }
+        #print-btn { 
+            width: 100%; padding: 12px; background: #27ae60; color: white; 
+            border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-top: 20px;
+        }
+
+        /* --- Styles du Document --- */
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; color: #000; background-color: #f0f0f0; line-height: 1.3; display: flex; }
+        .content-area { margin-left: 350px; width: calc(100% - 350px); display: flex; flex-direction: column; align-items: center; padding: 20px 0; }
+
+        .page { 
+            width: 210mm; height: 297mm; padding: 20mm 15mm; margin-bottom: 20px;
+            background: white; box-sizing: border-box; display: flex; flex-direction: column;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .header { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #0056b3; margin-bottom: 15px; padding-bottom: 8px; }
+        .logo-img { height: 60px; }
+        .header-text { text-align: right; }
+        h1 { margin: 0; font-size: 14pt; color: #0056b3; text-transform: uppercase; letter-spacing: 1px; }
+
+        h2 { font-size: 10pt; background-color: #dddddd; padding: 4px 12px; margin: 12px 0 6px 0; border-left: 5px solid #0056b3; text-transform: uppercase; }
+        
+        .val { color: #0056b3; font-weight: bold; border-bottom: 1px solid #aaa; padding: 0 2px; min-width: 30px; display: inline-block; vertical-align: bottom; }
+        .val:empty::after { content: "........................."; color: #ccc; font-weight: normal; }
+
+        .article-box { font-size: 9.5pt; margin-bottom: 8px; text-align: justify; }
+        .article-title { font-weight: bold; text-decoration: underline; color: #000; display: block; margin-bottom: 3px; }
+
+        .signature-section { margin-top: auto; padding-top: 15px; }
+        .sig-flex { display: flex; justify-content: space-between; margin-top: 10px; }
+        .sig-block { width: 45%; text-align: center; font-size: 10pt; }
+        .sig-box { border: 1.2px dashed #000; height: 80px; margin-top: 5px; }
+
+        @media print { 
+            #ui-panel { display: none; }
+            body { background: none; display: block; } 
+            .content-area { margin-left: 0; width: 100%; padding: 0; }
+            .page { margin: 0; border: none; box-shadow: none; page-break-after: always; } 
+            @page { size: A4; margin: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="ui-panel">
+        <h3>1. Propriétaire</h3>
+        <div class="input-group"><label>Nom :</label><input type="text" value="Monsieur RANDRIANJAKAJACY" oninput="updateVal('proprio', this.value)"></div>
+        <div class="input-group"><label>CIN & Domicile :</label><textarea rows="2" oninput="updateVal('cin', this.value)">III L 26 BG Tsarafara Amboditsiry Antananarivo 101, CIN n° 101 807 100 377 délivré le 30/09/192 à Ankazobe, duplicata du 22/07/18</textarea></div>
+        <div class="input-group"><label>Tél :</label><input type="text" value="0330284955 / 0347248975" oninput="updateVal('tel-p', this.value)"></div>
+        <div class="input-group"><label>NIF :</label><input type="text" value="4001898048" oninput="updateVal('nif', this.value)"></div>
+        <div class="input-group"><label>STAT :</label><input type="text" value="49295 11 2015 0 01195 du 13/03/2015" oninput="updateVal('stat', this.value)"></div>
+
+        <h3>2. Locataire (École)</h3>
+        <div class="input-group"><label>Nom :</label><input type="text" value="Polymathes" oninput="updateVal('ecole', this.value)"></div>
+        <div class="input-group"><label>Adresse :</label><input type="text" value="lot II A 147 Nanisana" oninput="updateVal('adresse', this.value)"></div>
+        <div class="input-group"><label>Représentant :</label><input type="text" value="Madame ANDRIAMARISSA Liliane" oninput="updateVal('rep', this.value)"></div>
+        <div class="input-group"><label>Tél :</label><input type="text" oninput="updateVal('tel-l', this.value)"></div>
+
+        <h3>3. Durée & Dates</h3>
+        <div class="input-group">
+            <label>Valeur durée :</label>
+            <div class="flex-row">
+                <input type="number" id="in-dur-val" value="2" oninput="updateDureeComp()">
+                <select id="in-dur-unite" onchange="updateDureeComp()"><option value="MOIS" selected>MOIS</option><option value="AN(S)">AN(S)</option></select>
+            </div>
+        </div>
+        <div class="input-group"><label>Période : Du / Au</label>
+            <div class="flex-row">
+                <input type="date" value="2026-01-01" oninput="updateVal('date-deb', formatDateLong(this.value))">
+                <input type="date" value="2026-02-02" oninput="updateVal('date-fin', formatDateLong(this.value))">
+            </div>
+        </div>
+        <div class="input-group"><label>Fait à Tana le :</label><input type="date" value="2026-01-05" oninput="updateVal('date-signature', formatDateLong(this.value))"></div>
+
+        <h3>4. Véhicule & Tarif</h3>
+        <div class="input-group"><label>Véhicule :</label><textarea rows="2" oninput="updateVal('bus', this.value)">Minibus / Sprinter de marque Mercedes, sources d’énergie Gasoil, 15 places, immatriculée 7502 TBN</textarea></div>
+        <div class="input-group"><label>Tarif :</label><input type="text" value="un million deux cent mille Ariary (1 200 000 Ar)" oninput="updateVal('tarif', this.value)"></div>
+
+        <button id="print-btn" onclick="window.print()">🖨️ IMPRIMER LE CONTRAT</button>
+    </div>
+
+    <div class="content-area">
+        <div class="page">
+            <div class="header">
+                <img src="../LOGO/IMG-20251027-WA0002.jpg" alt="Logo Polymathes" class="logo-img">
+                <div class="header-text">
+                    <h1>CONTRAT DE LOCATION</h1>
+                    <p style="font-size: 9pt; font-weight: bold; margin:0;">DE VEHICULE BUS SCOLAIRE</p>
+                </div>
+            </div>
+
+            <div class="article-box">
+                <strong>Entre les soussignés :</strong><br><br>
+                <span class="val" id="val-proprio">Monsieur RANDRIANJAKAJACY</span>, élisant domicile au <span class="val" id="val-cin">III L 26 BG Tsarafara Amboditsiry Antananarivo 101, CIN n° 101 807 100 377 délivré le 30/09/192 à Ankazobe, duplicata du 22/07/18</span>. 
+                NIF : <span class="val" id="val-nif">4001898048</span> | STAT : <span class="val" id="val-stat">49295 11 2015 0 01195 du 13/03/2015</span> | Tél : <span class="val" id="val-tel-p">0330284955 / 0347248975</span>, ci-après dénommé <strong>« Le Propriétaire »</strong>.<br>
+                <strong>D’autre part,</strong><br><br>
+                <span class="val" id="val-ecole">Polymathes</span>, élisant domicile au <span class="val" id="val-adresse">lot II A 147 Nanisana</span> représenté par <span class="val" id="val-rep">Madame ANDRIAMARISSA Liliane</span>. 
+                Tél : <span class="val" id="val-tel-l"></span>, ci-après dénommée <strong>« le locataire »</strong>.<br>
+                <strong>D’autre part</strong>
+            </div>
+
+            <p style="text-align: center; font-weight: bold; margin: 15px 0; text-decoration: underline;">IL A ETE CONVENU ET ARRETE CE QUI SUIT :</p>
+
+            <h2>Article 1 : Exposé des motifs</h2>
+            <div class="article-box">
+                Le présent contrat a pour objet de préciser les conditions auxquelles Monsieur RANDRIANJAKA offre pour location à <span class="val" id="val-ecole-ref">Polymathes</span>, une voiture <span class="val" id="val-bus">Minibus / Sprinter de marque Mercedes, sources d’énergie Gasoil, 15 places, immatriculée 7502 TBN</span>.<br>
+                Le véhicule est utilisé pour le transport d’écoliers ou de lycéens des établissements français d’Antananarivo.
+            </div>
+
+            <h2>Article 2 : Engagement des deux parties :</h2>
+            <div class="article-box">
+                <span class="article-title">2.1 Engagement du propriétaire :</span>
+                Le propriétaire s’engage à :
+                <ul style="margin: 5px 0;">
+                    <li>Mettre à la disposition du locataire un véhicule en bon état et conforme aux lois et règlements à Madagascar (assurance, visite technique, patente) avec chauffeur et en bonne santé et non alcoolique.</li>
+                    <li>Assurer la propreté et la désinfection quotidienne du véhicule ;</li>
+                    <li>Assurer la substitution d’un véhicule de remplacement en cas de panne du véhicule.</li>
+                    <li>Respecter la ponctualité suivant le planning du trajet mis à disposition.</li>
+                    <li>Le propriétaire du véhicule est civilement responsable des passagers à bord du véhicule en cas d’éventuels accidents de circulation dû au non-respect de l’entretien et/ou de la panne technique.</li>
+                    <li>Ne pas utiliser le titre « <span class="val" id="val-ecole-ref2">Polymathes</span> » du locataire dans toutes circonstances ou tout éventuel contrat en dehors du présent contrat.</li>
+                    <li>Ne pas conclure un contrat personnel relatif au transport des élèves des établissements des écoles primaires françaises ou Lycée français de Tananarive.</li>
+                    <li>Le véhicule est mis à la disposition du locataire durant l’horaire de travail de chaque établissement.</li>
+                </ul>
+            </div>
+
+            <div class="article-box">
+                <span class="article-title">2.2 Engagement du locataire :</span>
+                Le locataire s’engage à :
+                <ul style="margin: 5px 0;">
+                    <li>Mettre à la disposition du propriétaire les itinéraires de chaque véhicule et les arrêts du bus (annexe 1), les horaires de travail des élèves avec précisions de l’heure d’arrivée à l’école et l’heure de départ pour le retour (annexe 2).</li>
+                    <li>Informer le propriétaire (02) deux jours avant pour les éventuels changements de trajet.</li>
+                    <li>Régulariser le paiement de la location tous les fins du mois.</li>
+                </ul>
+            </div>
+            <div style="text-align: center; font-size: 8pt; color: #777; margin-top: auto;">Page 1 / 2</div>
+        </div>
+
+        <div class="page">
+            <div style="border-bottom: 2px solid #0056b3; margin-bottom: 15px; text-align: right; padding-bottom: 5px; font-weight: bold; color: #0056b3;">Suite du Contrat</div>
+
+            <h2>Article 3 : Tarifs</h2>
+            <div class="article-box">
+                Le tarif mensuel de location est fixé à <span class="val" id="val-tarif">un million deux cent mille Ariary (1 200 000 Ar)</span> par élève.<br>
+                Au cas où le Propriétaire souhaiterait réviser ces tarifs, il doit aviser le locataire avant la prochaine rentrée de classe sur sa nouvelle proposition.
+            </div>
+
+            <h2>Article 4 : Durée</h2>
+            <div class="article-box">
+                Le présent contrat est conclu pour une durée de <span class="val" id="val-duree-comp">2 MOIS</span> (allant du <span class="val" id="val-date-deb">1 Janvier 2026</span> au <span class="val" id="val-date-fin">2 Février 2026</span>) et poursuivi par tacite reconduction.
+            </div>
+
+            <h2>Article 5 : Règlement</h2>
+            <div class="article-box">
+                Le locataire s’engage à payer en espèces à chaque fin du mois le coût de la location.
+            </div>
+
+            <h2>Article 6 : Différends</h2>
+            <div class="article-box">
+                Tout différend né entre les parties à l’occasion de l’exécution ou de la résiliation du présent contrat sera traité à l’amiable. En cas de non conciliation, il est fait attribution de juridiction au tribunal compétent d’Antananarivo.
+            </div>
+
+            <div class="signature-section">
+                <div style="text-align: right; font-weight: bold; margin-bottom: 15px;">Fait à Antananarivo le <span id="val-date-signature">5 Janvier 2026</span>.</div>
+                <div class="sig-flex">
+                    <div class="sig-block"><strong>Le Propriétaire</strong><div class="sig-box"></div></div>
+                    <div class="sig-block"><strong>Le Locataire</strong><div class="sig-box"></div></div>
+                </div>
+            </div>
+            <div style="text-align: center; font-size: 8pt; color: #777; margin-top: auto;">Page 2 / 2</div>
+        </div>
+    </div>
+
+    <script>
+        function updateVal(id, value) { 
+            const target = document.getElementById('val-' + id);
+            if(target) target.innerText = value;
+            if(id === 'ecole') {
+                document.getElementById('val-ecole-ref').innerText = value;
+                document.getElementById('val-ecole-ref2').innerText = value;
+            }
+        }
+        function formatDateLong(dateStr) {
+            if(!dateStr) return "";
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+        }
+        function updateDureeComp() {
+            const v = document.getElementById('in-dur-val').value;
+            const u = document.getElementById('in-dur-unite').value;
+            document.getElementById('val-duree-comp').innerText = v ? (v + " " + u) : "";
+        }
+        window.onload = function() {
+            updateDureeComp();
+            document.getElementById('val-date-deb').innerText = formatDateLong("2026-01-01");
+            document.getElementById('val-date-fin').innerText = formatDateLong("2026-02-02");
+            document.getElementById('val-date-signature').innerText = formatDateLong("2026-01-05");
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fiche de Renseignements - Polymathes</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; color: #000; background-color: #f0f0f0; line-height: 1.1; }
+        
+        .page { 
+            width: 210mm; height: 297mm; padding: 8mm 12mm; margin: 0 auto; 
+            background: white; box-sizing: border-box; display: flex; flex-direction: column;
+            justify-content: space-between; 
+            page-break-after: avoid; overflow: hidden;
+        }
+
+        .header { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #0056b3; margin-bottom: 10px; padding-bottom: 8px; }
+        .logo-img { height: 55px; }
+        .header-text { text-align: right; }
+        h1 { margin: 0; font-size: 16pt; color: #0056b3; text-transform: uppercase; letter-spacing: 1px; }
+        .url-school { font-size: 9pt; color: #333; margin: 0; font-weight: bold; }
+
+        /* Fond de titre augmenté pour une visibilité maximale */
+        h2 { font-size: 9pt; background-color: #dddddd; padding: 4px 12px; margin: 10px 0 6px 0; border-left: 5px solid #0056b3; text-transform: uppercase; }
+        
+        .field { margin-bottom: 5px; width: 100%; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 20px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px 15px; }
+        
+        label { display: block; font-weight: bold; font-size: 8pt; margin-bottom: 1px; color: #000; }
+        .line { border-bottom: 1px solid #aaa; min-height: 19px; width: 100%; }
+
+        .classe-box { border: 1.2px solid #333; padding: 6px 15px; border-radius: 4px; font-size: 8pt; margin-top: 3px; }
+        .classe-options { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+        .classe-condition { font-size: 7.8pt; color: #000; font-weight: bold; border-top: 1px dashed #bbb; padding-top: 4px; display: block; }
+
+        .medical-box { border: 1.5px solid #a93226; padding: 8px 15px; border-radius: 6px; background-color: #fffafa; margin: 8px 0; }
+        .medical-label { color: #a93226; font-weight: bold; font-size: 8.5pt; margin-bottom: 4px; display: block; }
+        .medical-line { border-bottom: 1px solid #e6b0aa; height: 20px; width: 100%; }
+
+        .footer-area { display: flex; justify-content: space-between; align-items: flex-end; margin-top: auto; padding-bottom: 5px; }
+        
+        .instructions { width: 420px; font-size: 8.5pt; color: #000; font-weight: bold; line-height: 1.4; border: 1.2px solid #000; padding: 12px; border-radius: 6px; }
+        .instructions strong { color: #0056b3; text-transform: uppercase; display: block; margin-bottom: 5px; font-size: 9pt; text-decoration: underline; }
+
+        .sig-container { width: 240px; text-align: center; }
+        .sig-box { border: 1.2px dashed #000; height: 75px; margin-top: 5px; }
+
+        #print-btn { position: fixed; bottom: 15px; right: 15px; padding: 10px 20px; background-color: #0056b3; color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; z-index: 1000; }
+        
+        @media print { 
+            body { background: none; } 
+            .page { margin: 0; width: 210mm; height: 297mm; border: none; padding: 8mm 12mm; } 
+            #print-btn { display: none; }
+            @page { margin: 0; size: A4; }
+        }
+    </style>
+</head>
+<body>
+
+    <button id="print-btn" onclick="window.print()">🖨️ IMPRIMER LA FICHE</button>
+
+    <div class="page">
+        <div>
+            <div class="header">
+                <img src="../LOGO/IMG-20251027-WA0002.jpg" alt="Logo Polymathes" class="logo-img">
+                <div class="header-text">
+                    <h1>Fiche de Renseignements</h1>
+                    <p class="url-school">www.polymathes.mg</p>
+                </div>
+            </div>
+
+            <h2>I. IDENTITÉ DE L'ÉLÈVE</h2>
+            <div class="field"><label>Nom (majuscule) :</label><div class="line"></div></div>
+            <div class="field"><label>Prénoms :</label><div class="line"></div></div>
+            <div class="grid-3">
+                <div class="field"><label>Date de Naissance :</label><div class="line"></div></div>
+                <div class="field"><label>Lieu de Naissance :</label><div class="line"></div></div>
+                <div class="field"><label>Sexe : [ ] G &nbsp;&nbsp; [ ] F</label><div class="line"></div></div>
+            </div>
+            <div class="grid">
+                <div class="field"><label>WhatsApp / Téléphone Élève :</label><div class="line"></div></div>
+                <div class="field"><label>Email Élève :</label><div class="line"></div></div>
+            </div>
+            <div class="field">
+                <label>Classe souhaitée :</label>
+                <div class="classe-box">
+                    <div class="classe-options">
+                        <span>[ ] 6<sup>e</sup></span> <span>[ ] 5<sup>e</sup></span> <span>[ ] 4<sup>e</sup></span> <span>[ ] 3<sup>e</sup></span>
+                        <span style="color:#bbb">|</span>
+                        <span>[ ] 2<sup>de</sup></span> <span>[ ] 1<sup>ère</sup></span> <span>[ ] Tle</span>
+                    </div>
+                    <span class="classe-condition">
+                        * Si 1<sup>ère</sup>, précisez : [ ] Générale ou [ ] STMG (Sciences et Technologies du Management et de la Gestion)
+                    </span>
+                </div>
+            </div>
+            <div class="field"><label>Adresse de résidence habituelle :</label><div class="line"></div></div>
+
+            <div class="medical-box">
+                <span class="medical-label">Informations Médicales (Allergies, asthme, traitements particuliers) :</span>
+                <div class="medical-line"></div>
+                <div class="medical-line"></div>
+            </div>
+
+            <h2>II. RENSEIGNEMENTS SUR LE PÈRE</h2>
+            <div class="field"><label>Nom & Prénom :</label><div class="line"></div></div>
+            <div class="grid-3">
+                <div class="field"><label>Profession :</label><div class="line"></div></div>
+                <div class="field"><label>Téléphone :</label><div class="line"></div></div>
+                <div class="field"><label>Email / WhatsApp :</label><div class="line"></div></div>
+            </div>
+            <div class="field"><label>Adresse (si différente de l'élève) :</label><div class="line"></div></div>
+
+            <h2>III. RENSEIGNEMENTS SUR LA MÈRE</h2>
+            <div class="field"><label>Nom & Prénom :</label><div class="line"></div></div>
+            <div class="grid-3">
+                <div class="field"><label>Profession :</label><div class="line"></div></div>
+                <div class="field"><label>Téléphone :</label><div class="line"></div></div>
+                <div class="field"><label>Email / WhatsApp :</label><div class="line"></div></div>
+            </div>
+            <div class="field"><label>Adresse (si différente de l'élève) :</label><div class="line"></div></div>
+
+            <h2>IV. RENSEIGNEMENTS SUR LE TUTEUR</h2>
+            <div class="field"><label>Nom & Prénom :</label><div class="line"></div></div>
+            <div class="grid-3">
+                <div class="field"><label>Lien de parenté :</label><div class="line"></div></div>
+                <div class="field"><label>Profession :</label><div class="line"></div></div>
+                <div class="field"><label>Téléphone  :</label><div class="line"></div></div>
+            </div>
+            <div class="grid">
+                <div class="field"><label>Email / WhatsApp :</label><div class="line"></div></div>
+                <div class="field"><label>Adresse complète :</label><div class="line"></div></div>
+            </div>
+        </div>
+
+        <div>
+            <div class="footer-area">
+                <div class="instructions">
+                    <strong>Instructions de remplissage :</strong>
+                    • Écrire (Nom) en MAJUSCULES. Cocher les cases [X] avec soin.<br>
+                    • Élève : <u>Email OBLIGATOIRE</u> (Apprentissage du professionnalisme).<br>
+                    • Parents/Tuteur : <u>TÉLÉPHONE obligatoire</u>. Indiquez un Email ou, si et seulement si vous n'avez aucun moyen d'en créer un, indiquez un WhatsApp.<br>
+                    • Remplir impérativement au moins une section (Parent ou Tuteur).
+                </div>
+                <div class="sig-container">
+                    <label style="font-size: 8pt;">Fait à Antananarivo, le .... / .... / 2026</label>
+                    <div class="sig-box"></div>
+                    <label style="margin-top: 5px; display: block; font-weight: bold; font-size: 8pt;">Signature (Parent ou Tuteur)</label>
+                </div>
+            </div>
+
+            <div style="text-align: center; font-size: 8pt; color: #000; font-weight: bold; border-top: 1px solid #000; padding-top: 5px; margin-top: 5px;">
+                Établissement Scolaire Polymathes : Excellence – Ambition – Intégrité
+            </div>
+        </div>
+    </div>
+</body>
+</html>

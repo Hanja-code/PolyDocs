@@ -1,0 +1,8 @@
+# Configuration base de données
+config.php
+connect_db.php
+
+# Dépendances et OS
+.DS_Store
+Thumbs.db
+node_modules/

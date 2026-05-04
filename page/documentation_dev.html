@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation Technique | Polymathes</title>
+    <link rel="stylesheet" href="../style/documentation.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <section class="dashboard">
+        <header>
+            <div class="logo-area">
+                <a href="../index.html" class="btn-dev" style="margin-bottom: 10px; display: inline-block;">
+                    <i class="fa-solid fa-arrow-left"></i> Retour
+                </a>
+                <h1>Documentation Technique</h1>
+                <p>Espace Développeur Polymathes</p>
+            </div>
+        </header>
+
+        <div class="main-layout">
+            <div class="grid-container">
+                
+                <div class="card">
+                    <div class="icon-box"><i class="fa-solid fa-layer-group"></i></div>
+                    <div>
+                        <h3>Interface UI</h3>
+                        <p>Structure plein écran et cartes égales.</p>
+                    </div>
+                    <div class="card-btns">
+                        <button onclick="openDocDetails('ui')" class="btn-main" style="width:100%">Consulter</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="icon-box"><i class="fa-solid fa-microchip"></i></div>
+                    <div>
+                        <h3>Technos Utilisées</h3>
+                        <p>Langages, Frameworks et Bibliothèques.</p>
+                    </div>
+                    <div class="card-btns">
+                        <button onclick="openDocDetails('tech')" class="btn-main" style="width:100%">Consulter</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="icon-box"><i class="fa-solid fa-database"></i></div>
+                    <div>
+                        <h3>Backend & DB</h3>
+                        <p>Architecture MySQL, PHP et flux AJAX.</p>
+                    </div>
+                    <div class="card-btns">
+                        <button onclick="openDocDetails('db')" class="btn-main" style="width:100%">Consulter</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="icon-box"><i class="fa-solid fa-folder-tree"></i></div>
+                    <div>
+                        <h3>Gestion Modèles</h3>
+                        <p>Catégories, ajout et création de fichiers.</p>
+                    </div>
+                    <div class="card-btns">
+                        <button onclick="openDocDetails('modele')" class="btn-main" style="width:100%">Consulter</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <aside id="docDetails" class="details-section">
+                <div class="details-header">
+                    <h3>Détails</h3>
+                    <button onclick="closeDocDetails()" class="btn-close">&times;</button>
+                </div>
+                <div id="docDetailsContent" class="details-body">
+                    <p style="text-align:center; color:#718096; margin-top:50px;">Sélectionnez une section pour voir les détails.</p>
+                </div>
+            </aside>
+        </div>
+
+        <footer class="dev-section">
+            <div class="dev-content">
+                <div class="dev-text">
+                    <strong><i class="fa-solid fa-code"></i> MODE DOCUMENTATION</strong>
+                    <p>Référence technique pour l'implémentation du backend.</p>
+                </div>
+            </div>
+        </footer>
+    </section>
+
+    <script>
+        function openDocDetails(topic) {
+            const panel = document.getElementById('docDetails');
+            const content = document.getElementById('docDetailsContent');
+            const docs = {
+                'ui': `
+                    <h4>1. Interface Utilisateur (UI)</h4>
+                    <p><strong>Description :</strong> Système "Plein Écran Strict" (No-Scroll) basé sur une architecture de panneaux coulissants (Slider) et une section de détails contextuelle.</p>
+                    
+                    <p><strong><i class="fa-solid fa-triangle-exclamation"></i> Prérequis avant modification :</strong></p>
+                    <ul>
+                        <li>Comprendre la propriété <code>overflow: hidden</code> appliquée au <code>body</code>.</li>
+                        <li>Maîtriser <code>Flexbox</code> pour le positionnement du panneau de détails.</li>
+                        <li>Connaître les variables CSS définies dans <code>:root</code>.</li>
+                    </ul>
+
+                    <p><strong><i class="fa-solid fa-list-check"></i> Instructions impératives :</strong></p>
+                    <ol>
+                        <li><strong>Hauteur des cartes :</strong> La classe <code>.card</code> doit impérativement conserver une hauteur fixe (ex: 280px) pour garantir l'alignement visuel horizontal.</li>
+                        <li><strong>Gestion du Scroll :</strong> Ne jamais activer le scroll sur le <code>body</code>. Le défilement est réservé exclusivement à <code>.grid-container</code> et <code>.details-body</code>.</li>
+                        <li><strong>Responsive :</strong> Toute modification de la grille doit passer par <code>grid-template-columns</code> pour éviter le chevauchement sur petit écran.</li>
+                    </ol>
+                `,
+
+                'tech': `
+                    <h4>2. Stack Technologique</h4>
+                    <p><strong>Description :</strong> Environnement Front-end moderne, léger et sans framework lourd, optimisé pour la rapidité d'exécution.</p>
+                    
+                    <p><strong><i class="fa-solid fa-microchip"></i> Composants utilisés :</strong></p>
+                    <table style="width:100%; font-size:0.85rem; border-collapse:collapse; margin-bottom: 15px;">
+                        <tr style="border-bottom:1px solid #eee;"><td><strong>Langage</strong></td><td>JavaScript ES6+ (DOM Dynamique)</td></tr>
+                        <tr style="border-bottom:1px solid #eee;"><td><strong>Style</strong></td><td>CSS3 (Variables & Flexbox)</td></tr>
+                        <tr style="border-bottom:1px solid #eee;"><td><strong>Icônes</strong></td><td>FontAwesome 6.4 (SVG Font)</td></tr>
+                        <tr style="border-bottom:1px solid #eee;"><td><strong>Police</strong></td><td>Inter (Google Fonts)</td></tr>
+                    </table>
+
+                    <p><strong><i class="fa-solid fa-wrench"></i> Consignes de maintenance :</strong></p>
+                    <ul>
+                        <li><strong>Icônes :</strong> Utiliser uniquement les classes préfixées par <code>fa-solid</code> pour la cohérence visuelle.</li>
+                        <li><strong>Variables :</strong> Ne pas coder de couleurs en dur (Hex). Utiliser <code>var(--poly-blue)</code> ou <code>var(--poly-gold)</code> pour respecter la charte.</li>
+                        <li><strong>Performance :</strong> Préférer <code>classList.add/remove</code> pour les animations plutôt que de modifier les styles directement en JS.</li>
+                    </ul>
+                `,
+
+                'db': `
+                    <h4>3. Backend & Base de données (MySQL / PHP / AJAX)</h4>
+                    <p><strong>Architecture :</strong> Système relationnel structuré pour la gestion dynamique des modèles administratifs.</p>
+                    
+                    <p><strong><i class="fa-solid fa-database"></i> Structure des Tables :</strong></p>
+                    <ul>
+                        <li><strong>Table <code>categories</code> :</strong> Gère les dossiers (ex: <em>ID 17: Élèves</em>). Colonnes : <code>id</code>, <code>titre</code>, <code>description</code>, <code>icon</code>, <code>is_multi</code> (booléen pour autoriser plusieurs modèles), <code>details_doc</code>.</li>
+                        <li><strong>Table <code>models</code> :</strong> Contient les fichiers HTML. Colonnes : <code>id</code>, <code>category_id</code> (clé étrangère vers <code>categories</code>), <code>titre</code>, <code>file_path</code> (ex: <code>carte_etudiant.html</code>), <code>details_mod</code>.</li>
+                    </ul>
+
+                    <p><strong><i class="fa-solid fa-server"></i> Logique PHP & Sécurité :</strong></p>
+                    <ul>
+                        <li><strong>Moteur :</strong> PHP 8.x avec extension <code>PDO</code>.</li>
+                        <li><strong>Sécurité :</strong> Requêtes préparées systématiques pour contrer les injections SQL.</li>
+                        <li><strong>Réponses :</strong> Le serveur renvoie des en-têtes <code>header('Content-Type: application/json')</code> pour une lecture fluide par le front-end.</li>
+                    </ul>
+
+                    <p><strong><i class="fa-solid fa-sync"></i> Flux AJAX :</strong></p>
+                    <ol>
+                        <li>Les actions (Ajout, Édition, Suppression) utilisent <code>XMLHttpRequest</code> pour éviter le rafraîchissement de page.</li>
+                        <li>Les données sont envoyées via <code>FormData</code> (permettant aussi l'upload de logos si nécessaire).</li>
+                        <li>Le DOM est mis à jour en temps réel uniquement si le serveur retourne un succès (HTTP 200).</li>
+                    </ol>
+                `,
+
+                'modele': `
+                    <h4>4. <i class="fa-solid fa-folder-tree"></i> Gestion des Catégories & Modèles</h4>
+                    <p><strong>Description :</strong> Outil de génération universel pour tout type de document (Identité, Administratif, Scolaire, Parents).</p>
+                    
+                    <p><strong><i class="fa-solid fa-address-book"></i> Support & Contacts :</strong></p>
+                    <div style="background: rgba(0,0,0,0.05); padding: 10px; border-radius: 8px; border-left: 4px solid #0056b3; font-size: 0.9em;">
+                        <strong>HANJA Eli Dina</strong><br>
+                        <i class="fa-solid fa-phone"></i> 038 37 050 16 | <i class="fa-brands fa-whatsapp"></i> 038 37 050 16<br>
+                        <i class="fa-solid fa-envelope"></i> hanjaelidina@gmail.com | <i class="fa-brands fa-facebook"></i> Hanja Eli Dina<br>
+                        <i class="fa-brands fa-linkedin"></i> linkedin.com/in/hanja-eli-dina-776211279 | <i class="fa-brands fa-github"></i> github.com/Hanja-code
+                    </div>
+
+                    <p><strong><i class="fa-solid fa-pen-nib"></i> Règles de Création :</strong></p>
+                    <ul>
+                        <li>Respecter la charte graphique Polymathes (Logo et Bleu <code>#0056b3</code>).</li>
+                        <li>Utiliser les unités réelles (<strong>mm</strong>, <strong>cm</strong>) pour formats <strong>A4, A5, A3</strong>.</li>
+                        <li>Mise en page optimisée pour faciliter l'impression et la découpe.</li>
+                    </ul>
+
+                    <p><strong><i class="fa-solid fa-plus-circle"></i> Procédure d'Ajout :</strong></p>
+                    <ol>
+                        <li>Placer le HTML dans <code>page/modeles/</code>.</li>
+                        <li>Saisir <strong>uniquement le nom du fichier</strong> (ex: <code>badge.html</code>) dans le formulaire.</li>
+                        <li>Utiliser "Plusieurs modèles" (is_multi) pour créer un dossier ou décocher pour un accès direct.</li>
+                    </ol>
+
+                    <p><strong><i class="fa-solid fa-screwdriver-wrench"></i> Maintenance :</strong></p>
+                    <ul>
+                        <li>Édition et suppression via les icônes <i class="fa-solid fa-pen-to-square"></i> et <i class="fa-solid fa-trash"></i>.</li>
+                        <li>Protection automatique : impossible de supprimer une catégorie non vide.</li>
+                    </ul>
+                `
+            };
+            content.innerHTML = docs[topic];
+            panel.classList.add('active');
+        }
+        function closeDocDetails() { document.getElementById('docDetails').classList.remove('active'); }
+    </script>
+</body>
+</html>

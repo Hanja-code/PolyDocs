@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace Administratif | Polymathes</title>
+    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <section class="dashboard">
+        <header>
+            <div class="logo-area">
+                <h1>Documents Administratifs</h1>
+                <p>Institut Polymathes</p>
+            </div>
+            <button id="addDocBtn" class="btn-main">+ Nouveau Type</button>
+        </header>
+
+        <div class="grid-container" id="documentGrid"></div>
+
+        <footer class="dev-section">
+            <div class="dev-content">
+                <div class="dev-text">
+                    <strong><i class="fa-solid fa-database"></i> ZONE DE MAINTENANCE - MODE DYNAMIQUE</strong>
+                    <p>Les catégories sont extraites de la base de données. Il est <strong>impératif</strong> de consulter la documentation technique avant toute modification du script d'injection.</p>
+                </div>
+                <a href="page/documentation_dev.html" class="btn-dev">Consulter la Documentation</a>
+            </div>
+        </footer>
+    </section>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <h2>Nouveau Document</h2>
+            <input type="text" id="docTitle" placeholder="Nom du document">
+            <input type="text" id="docDesc" placeholder="Description courte">
+            
+            <div style="margin: 10px 0; display: flex; align-items: center; gap: 10px;">
+                <input type="checkbox" id="isMultiModel" style="width: auto; margin: 0; cursor: pointer;">
+                <label for="isMultiModel" style="font-size: 0.85rem; font-weight: bold; color: var(--poly-blue); cursor: pointer;">Plusieurs modèles disponibles ?</label>
+            </div>
+
+            <input type="text" id="docLink" placeholder="Nom du fichier (ex: doc.html)">
+            
+            <p class="label-mini">Choisir une icône (faites défiler) :</p>
+            <div class="icon-selector" id="iconSelector">
+                <i class="fa-solid fa-file-contract" data-icon="fa-file-contract"></i>
+                <i class="fa-solid fa-user-pen" data-icon="fa-user-pen"></i>
+                <i class="fa-solid fa-graduation-cap" data-icon="fa-graduation-cap"></i>
+                
+                <i class="fa-solid fa-file-lines active" data-icon="fa-file-lines"></i>
+                <i class="fa-solid fa-file-signature" data-icon="fa-file-signature"></i>
+                <i class="fa-solid fa-file-invoice-dollar" data-icon="fa-file-invoice-dollar"></i>
+                <i class="fa-solid fa-file-export" data-icon="fa-file-export"></i>
+                <i class="fa-solid fa-stamp" data-icon="fa-stamp"></i>
+                <i class="fa-solid fa-certificate" data-icon="fa-certificate"></i>
+                <i class="fa-solid fa-clipboard-list" data-icon="fa-clipboard-list"></i>
+                <i class="fa-solid fa-clipboard-check" data-icon="fa-clipboard-check"></i>
+                
+                <i class="fa-solid fa-book" data-icon="fa-book"></i>
+                <i class="fa-solid fa-book-open-reader" data-icon="fa-book-open-reader"></i>
+                <i class="fa-solid fa-award" data-icon="fa-award"></i>
+                <i class="fa-solid fa-medal" data-icon="fa-medal"></i>
+                <i class="fa-solid fa-user-graduate" data-icon="fa-user-graduate"></i>
+                <i class="fa-solid fa-school" data-icon="fa-school"></i>
+                
+                <i class="fa-solid fa-address-card" data-icon="fa-address-card"></i>
+                <i class="fa-solid fa-id-badge" data-icon="fa-id-badge"></i>
+                <i class="fa-solid fa-user-check" data-icon="fa-user-check"></i>
+                <i class="fa-solid fa-id-card-clip" data-icon="fa-id-card-clip"></i>
+                
+                <i class="fa-solid fa-briefcase" data-icon="fa-briefcase"></i>
+                <i class="fa-solid fa-receipt" data-icon="fa-receipt"></i>
+                <i class="fa-solid fa-circle-info" data-icon="fa-circle-info"></i>
+                <i class="fa-solid fa-calendar-check" data-icon="fa-calendar-check"></i>
+                <i class="fa-solid fa-envelope-open-text" data-icon="fa-envelope-open-text"></i>
+                <i class="fa-solid fa-vault" data-icon="fa-vault"></i>
+            </div>
+            
+            <div class="modal-btns">
+                <button onclick="closeModal()" class="btn-cancel">Annuler</button>
+                <button onclick="addNewDocument()" class="btn-main">Ajouter</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

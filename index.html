@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace Administratif | Polymathes</title>
+    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body id="mainBody">
+
+<div class="viewport-slider">
+    <div class="panels-container">
+        
+        <section class="panel dashboard">
+            <header>
+                <div class="logo-area">
+                    <h1>Documents Administratifs</h1>
+                    <p>Institut Polymathes</p>
+                </div>
+                <button id="addDocBtn" class="btn-main">+ Nouveau Type</button>
+            </header>
+
+            <div class="grid-container" id="documentGrid"></div>
+
+            <footer class="dev-section">
+                <div class="dev-content">
+                    <div class="dev-text">
+                        <strong><i class="fa-solid fa-database"></i> ZONE DE MAINTENANCE - MODE DYNAMIQUE</strong>
+                        <p>Les catégories sont extraites de la base de données. Consultez la documentation technique.</p>
+                    </div>
+                    <a href="page/documentation_dev.html" class="btn-dev">Consulter la Documentation</a>
+                </div>
+            </footer>
+        </section>
+
+        <section class="panel dashboard">
+            <header>
+                <div class="logo-area">
+                    <button onclick="slideBack()" class="btn-dev" style="margin-bottom: 10px;">
+                        <i class="fa-solid fa-arrow-left"></i> Retour
+                    </button>
+                    <h1 id="pageTitle">Chargement...</h1>
+                    <p id="pageSubtitle">Veuillez patienter...</p>
+                </div>
+                <button id="addModelBtn" class="btn-main">+ Nouveau Modèle</button>
+            </header>
+
+            <div class="grid-container" id="modelGrid"></div>
+
+            <footer class="dev-section">
+                <div class="dev-content">
+                    <div class="dev-text">
+                        <strong><i class="fa-solid fa-folder-open"></i> DOSSIER SOURCE : page/modeles/</strong>
+                        <p>Cette liste est dynamique. Les fichiers sont configurés pour être lus dans <code>page/modeles/</code>.</p>
+                    </div>
+                    <a href="page/documentation_dev.html" class="btn-dev">Consulter la Documentation</a>
+                </div>
+            </footer>
+        </section>
+
+    </div>
+</div>
+
+<div id="modal" class="modal">
+    <div class="modal-content" id="modalContent">
+        
+    </div>
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>

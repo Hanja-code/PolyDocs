@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planche Personnalisable - Polymathes</title>
+    <style>
+        /* --- Interface de Saisie (Invisible à l'impression) --- */
+        #ui-panel {
+            position: fixed; left: 0; top: 0; width: 320px; height: 100vh;
+            background: #2c3e50; color: white; padding: 15px;
+            box-sizing: border-box; overflow-y: auto; z-index: 1000;
+            border-right: 3px solid #0056b3;
+        }
+        .selector-group { background: #1a252f; padding: 10px; border-radius: 6px; margin-bottom: 15px; border: 1px solid #0056b3; }
+        .student-form { background: #34495e; padding: 10px; border-radius: 6px; margin-bottom: 20px; border-left: 4px solid #27ae60; }
+        .student-form h4 { margin: 0 0 10px 0; font-size: 10pt; color: #27ae60; text-transform: uppercase; }
+        .input-group { margin-bottom: 8px; }
+        label { display: block; font-size: 7.5pt; margin-bottom: 2px; color: #bdc3c7; }
+        input, select { width: 100%; padding: 5px; border-radius: 4px; border: none; background: #2c3e50; color: white; box-sizing: border-box; font-size: 8.5pt; }
+        #print-btn { width: 100%; padding: 12px; background: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; position: sticky; bottom: 0; margin-top: 10px; box-shadow: 0 -5px 10px rgba(0,0,0,0.3); }
+
+        /* --- Zone d'Impression A4 --- */
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; display: flex; background: #e0e0e0; }
+        .print-container { margin-left: 340px; padding: 5mm; }
+        .a4-page {
+            width: 210mm; min-height: 297mm; background: white; padding: 5mm;
+            box-sizing: border-box; display: flex; flex-direction: column; align-items: center;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+
+        /* --- BLOC PLIABLE --- */
+        .card-pair {
+            display: flex; margin-bottom: 2mm; border: 1px solid #ccc;
+            border-radius: 10px; overflow: hidden; position: relative;
+        }
+
+        /* --- DESIGN DE LA CARTE --- */
+        .card { width: 85.6mm; height: 53.98mm; background: white; position: relative; display: flex; flex-direction: column; }
+        .card-recto { border-right: 1px dashed #ddd; }
+
+        .card-header {
+            background: #fff; height: 15mm; display: flex; align-items: center; padding: 0 18px;
+            border-bottom: 2.5px solid #0056b3; flex-shrink: 0;
+        }
+        .logo-img { height: 11mm; object-fit: contain; }
+        
+        .card-body-recto { display: flex; padding: 8px 18px 12px 18px; gap: 18px; flex-grow: 1; align-items: center; }
+        .photo-area {
+            width: 20mm; height: 25mm; border: 1.2px solid #0056b3; background: #f9f9f9;
+            overflow: hidden; display: flex; align-items: center; justify-content: center; border-radius: 4px; flex-shrink: 0;
+        }
+        .photo-area img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .info-area { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 4px; }
+        .label-id { font-size: 5.5pt; color: #888; font-weight: bold; text-transform: uppercase; }
+        .val-name { font-size: 10pt; font-weight: bold; color: #000; text-transform: uppercase; min-height: 1.1em; border-bottom: 0.5pt solid #eee; }
+        .val-class { font-size: 8pt; color: #0056b3; font-weight: bold; min-height: 1.1em; border-bottom: 0.5pt solid #eee; }
+        .val-id { font-family: 'Courier New', Courier, monospace; font-size: 9.5pt; font-weight: bold; color: #d32f2f; min-height: 1.1em; border-bottom: 0.5pt solid #eee; }
+        
+        .card-footer {
+            background: #0056b3; height: 6.5mm; display: flex; justify-content: space-between; align-items: center;
+            padding: 0 18px; box-sizing: border-box; font-size: 6.5pt; color: white; flex-shrink: 0;
+        }
+
+        .card-body-verso { flex-grow: 1; padding: 10px 18px 15px 18px; display: flex; flex-direction: column; justify-content: space-between; }
+        .terms { font-size: 6pt; color: #444; line-height: 1.2; text-align: justify; border-bottom: 1px solid #eee; padding-bottom: 4px; }
+        .contact-info { margin-top: 4px; font-size: 6.5pt; color: #000; }
+        .contact-item { display: flex; align-items: center; margin-bottom: 1px; }
+        .contact-item strong { color: #0056b3; width: 70px; display: inline-block; flex-shrink: 0; }
+        .signature-area { align-self: flex-end; text-align: center; margin-top: -5px; }
+        .sig-box { width: 30mm; height: 10mm; border: 1px dashed #ccc; margin-top: 2px; border-radius: 4px; background: #fafafa; }
+        .card-footer-verso { justify-content: center !important; letter-spacing: 0.5px; }
+
+        @media print {
+            #ui-panel { display: none; }
+            body { background: white; }
+            .print-container { margin: 0; padding: 0; }
+            .a4-page { box-shadow: none; padding: 10mm 5mm; width: 210mm; height: 297mm; }
+            .card-pair { border: 1px solid #ccc; -webkit-print-color-adjust: exact; }
+            @page { size: A4; margin: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="ui-panel">
+        <h3 style="margin-top:0;">CONFIGURATION</h3>
+        <div class="selector-group">
+            <label>Nombre d'élèves sur la page :</label>
+            <select id="student-count" onchange="generateUIAndCards()">
+                <option value="1">1 Élève</option>
+                <option value="2">2 Élèves</option>
+                <option value="3">3 Élèves</option>
+                <option value="4">4 Élèves</option>
+                <option value="5" selected>5 Élèves</option>
+            </select>
+        </div>
+
+        <div id="forms-container"></div>
+        
+        <button id="print-btn" onclick="window.print()">🖨️ IMPRIMER LA SÉLECTION</button>
+    </div>
+
+    <div class="print-container">
+        <div class="a4-page" id="cards-container"></div>
+    </div>
+
+    <script>
+        function generateUIAndCards() {
+            const count = document.getElementById('student-count').value;
+            const formsContainer = document.getElementById('forms-container');
+            const cardsContainer = document.getElementById('cards-container');
+            
+            formsContainer.innerHTML = '';
+            cardsContainer.innerHTML = '';
+
+            for(let i=1; i<=count; i++) {
+                formsContainer.innerHTML += `
+                <div class="student-form">
+                    <h4>Élève ${i}</h4>
+                    <div class="input-group"><label>Nom & Prénoms :</label><input type="text" oninput="updateCard(${i}, 'name', this.value)"></div>
+                    <div class="input-group">
+                        <label>Classe :</label>
+                        <select onchange="updateCard(${i}, 'class', this.value)">
+                            <option value="">Sélectionner</option>
+                            <optgroup label="Collège">
+                                <option value="6ème">6ème</option>
+                                <option value="5ème">5ème</option>
+                                <option value="4ème">4ème</option>
+                                <option value="3ème">3ème</option>
+                            </optgroup>
+                            <optgroup label="Lycée">
+                                <option value="Seconde">Seconde</option>
+                                <option value="Première">Première</option>
+                                <option value="Terminale">Terminale</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    <div class="input-group"><label>Matricule :</label><input type="text" oninput="updateCard(${i}, 'id', this.value)"></div>
+                    <div class="input-group"><label>Photo :</label><input type="file" accept="image/*" onchange="previewCardImage(${i}, this)"></div>
+                    <div class="input-group"><label>Urgence :</label><input type="text" oninput="updateCard(${i}, 'urgence', this.value)"></div>
+                </div>`;
+
+                cardsContainer.innerHTML += `
+                <div class="card-pair">
+                    <div class="card card-recto">
+                        <div class="card-header"><img src="../LOGO/IMG-20251027-WA0002.jpg" class="logo-img"></div>
+                        <div class="card-body-recto">
+                            <div class="photo-area"><img id="img-${i}" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="></div>
+                            <div class="info-area">
+                                <div><div class="label-id">NOM ET PRÉNOMS</div><div id="name-${i}" class="val-name" contenteditable="true"></div></div>
+                                <div><div class="label-id">NIVEAU / CLASSE</div><div id="class-${i}" class="val-class" contenteditable="true"></div></div>
+                                <div><div class="label-id">MATRICULE</div><div id="id-${i}" class="val-id" contenteditable="true"></div></div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div>Année : <strong contenteditable="true">2025 - 2026</strong></div>
+                            <div style="font-weight: bold;">CARTE ÉTUDIANT</div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body-verso">
+                            <div class="terms">Cette carte, strictement personnelle, justifie le statut d'étudiant et l'accès aux locaux. Elle doit être présentée obligatoirement lors des contrôles et examens. En cas de perte, l'étudiant doit informer immédiatement l'administration.</div>
+                            <div class="contact-info">
+                                <div class="contact-item" style="color: #d32f2f; font-weight: bold;"><strong>URGENCE :</strong> <span id="urgence-${i}" contenteditable="true"></span></div>
+                                <div class="contact-item"><strong>Tél :</strong> <span contenteditable="true">032 58 754 98 / 038 17 078 45</span></div>
+                                <div class="contact-item"><strong>Email :</strong> <span contenteditable="true">info@polymathes.mg</span></div>
+                                <div class="contact-item"><strong>Adresse :</strong> <span contenteditable="true">Antsakaviro B.P 3883 - Antananarivo</span></div>
+                            </div>
+                            <div class="signature-area"><div class="sig-label">La Direction</div><div class="sig-box"></div></div>
+                        </div>
+                        <div class="card-footer card-footer-verso">WWW.POLYMATHES.MG</div>
+                    </div>
+                </div>`;
+            }
+        }
+
+        function updateCard(num, field, val) {
+            const el = document.getElementById(field + '-' + num);
+            if (el) el.innerText = (field === 'name' || field === 'class') ? val.toUpperCase() : val;
+        }
+
+        function previewCardImage(num, input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) { document.getElementById('img-' + num).src = e.target.result; }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        window.onload = generateUIAndCards;
+    </script>
+</body>
+</html>
